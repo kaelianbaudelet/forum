@@ -1,0 +1,15 @@
+.dockerignore
+.env
+.git
+.gitignore
+.idea
+.vscode
+build/
+.dart_tool/
+.pub-cache/
+.pub/
+android/app/debug/
+android/app/profile/
+android/app/release/
+*.iml
+*.log
