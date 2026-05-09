@@ -1,0 +1,54 @@
+services:
+  web:
+    build: .
+    ports:
+      - "8000:80"
+    volumes:
+      - .:/var/www/html
+    environment:
+      - DATABASE_URL=mysql://login:password@mariadb_db:3306/dbforum?serverVersion=12.2.2-MariaDB&charset=utf8mb4
+    depends_on:
+      mariadb_db:
+        condition: service_healthy
+
+  mariadb_db:
+    image: mariadb:12
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+      MARIADB_DATABASE: dbforum
+      MARIADB_USER: login
+      MARIADB_PASSWORD: password
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  dbgate:
+    image: dbgate/dbgate
+    container_name: forum_dbgate_container
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - CONNECTIONS=forum
+      - ENGINE_forum=mysql@dbgate-plugin-mysql
+      - SERVER_forum=mariadb_db
+      - PORT_forum=3306
+      - USER_forum=login
+      - PASSWORD_forum=password
+      - DATABASE_forum=dbforum
+      - LABEL_forum=Forum Database
+    volumes:
+      - dbgate_data:/root/.dbgate
+    depends_on:
+      mariadb_db:
+        condition: service_healthy
+
+volumes:
+  db_data:
+  dbgate_data:
