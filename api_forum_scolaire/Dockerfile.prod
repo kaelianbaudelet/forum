@@ -32,6 +32,9 @@ WORKDIR /var/www/html
 # Copy project files
 COPY . .
 
+# Set environment to prod so post-install scripts (like cache:clear) don't try to load dev bundles
+ENV APP_ENV=prod
+
 # Install dependencies
 RUN composer install --no-dev --optimize-autoloader
 
