@@ -19,8 +19,6 @@ RUN flutter pub get
 # Build Web
 RUN flutter build web --release -v
 
-# Build APK
-RUN flutter build apk --release
 
 # Stage 2: Serve with Nginx
 FROM nginx:alpine
@@ -28,10 +26,6 @@ FROM nginx:alpine
 # Copy web artifacts to nginx
 COPY --from=build-env /app/build/web /usr/share/nginx/html
 
-# Copy the generated APK into the assets folder of the web server
-# This allows users to download the APK directly from the website
-RUN mkdir -p /usr/share/nginx/html/assets
-COPY --from=build-env /app/build/app/outputs/flutter-apk/app-release.apk /usr/share/nginx/html/assets/app-release.apk
 
 # Add a script to inject environment variables into the .env file at runtime
 RUN echo '#!/bin/sh' > /entrypoint.sh && \
