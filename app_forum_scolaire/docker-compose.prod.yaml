@@ -4,4 +4,7 @@ services:
     container_name: forum_frontend_prod
     ports:
       - "6754:80"
+    environment:
+      - API_BASE_URL=${API_BASE_URL:-http://localhost:6756/api}
+      - APP_DEMO=${APP_DEMO:-true}
     restart: always

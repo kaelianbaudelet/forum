@@ -7,7 +7,7 @@ services:
       - "6756:80"
     environment:
       - APP_ENV=prod
-      - DATABASE_URL=mysql://login:password@mariadb_db:3306/dbforum?serverVersion=12.2.2-MariaDB&charset=utf8mb4
+      - DATABASE_URL=${DATABASE_URL:-mysql://login:password@mariadb_db:3306/dbforum?serverVersion=12.2.2-MariaDB&charset=utf8mb4}
     depends_on:
       mariadb_db:
         condition: service_healthy
@@ -15,10 +15,10 @@ services:
   mariadb_db:
     image: mariadb:12
     environment:
-      MARIADB_ROOT_PASSWORD: root
-      MARIADB_DATABASE: dbforum
-      MARIADB_USER: login
-      MARIADB_PASSWORD: password
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD:-root}
+      MARIADB_DATABASE: ${MARIADB_DATABASE:-dbforum}
+      MARIADB_USER: ${MARIADB_USER:-login}
+      MARIADB_PASSWORD: ${MARIADB_PASSWORD:-password}
     ports:
       - "6755:3306"
     volumes:
