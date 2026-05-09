@@ -360,39 +360,7 @@ class _WebLandingPageState extends State<WebLandingPage> {
                           padding: const EdgeInsets.only(right: 20),
                           child: Row(
                             children: [
-                              PopupMenuButton<String>(
-                                icon: const Icon(
-                                  Icons.download,
-                                  color: Colors.white,
-                                ),
-                                tooltip: "Télécharger l'application",
-                                onSelected: (value) {
-                                  if (value == 'android') {
-                                    launchUrl(
-                                      Uri.parse(
-                                        "assets/assets/app-release.apk",
-                                      ),
-                                      mode: LaunchMode.externalApplication,
-                                    );
-                                  }
-                                },
-                                itemBuilder: (context) => [
-                                  const PopupMenuItem(
-                                    value: 'android',
-                                    child: Row(
-                                      children: [
-                                        FaIcon(
-                                          FontAwesomeIcons.android,
-                                          color: Colors.black,
-                                          size: 20,
-                                        ),
-                                        SizedBox(width: 12),
-                                        Text("Android (APK)"),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
+
                               Link(
                                 uri: Uri.parse(
                                   "https://github.com/kaelianbaudelet/forum",

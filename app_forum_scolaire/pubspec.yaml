@@ -72,7 +72,6 @@ flutter:
     - assets/.env.local
     - assets/logo.png
     - assets/logo.svg
-    - assets/app-release.apk
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
