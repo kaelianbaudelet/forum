@@ -10,11 +10,14 @@ COPY . .
 # Accept Android licenses
 RUN yes | flutter doctor --android-licenses
 
+# Fix git dubious ownership when running as root, and enable web
+RUN git config --global --add safe.directory /app && flutter config --enable-web
+
 # Get dependencies
 RUN flutter pub get
 
 # Build Web
-RUN flutter build web --release
+RUN flutter build web --release -v
 
 # Build APK
 RUN flutter build apk --release
