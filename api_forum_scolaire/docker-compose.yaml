@@ -33,7 +33,7 @@ services:
     container_name: forum_dbgate_container
     restart: always
     ports:
-      - "3000:3000"
+      - "8020:3000"
     environment:
       - CONNECTIONS=forum
       - ENGINE_forum=mysql@dbgate-plugin-mysql

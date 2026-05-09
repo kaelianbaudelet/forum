@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
 import '../utils/secure_storage.dart';
+import '../utils/error_translator.dart';
+
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
@@ -74,7 +76,7 @@ class _LoginFormState extends State<LoginForm> {
           context: context,
           builder: (context) => AlertDialog(
             title: const Text('Échec de l\'authentification'),
-            content: Text('Une erreur est survenue : $e. Veuillez réessayer.'),
+            content: Text(ErrorTranslator.translate(e)),
             actions: <Widget>[
               TextButton(
                 child: const Text('OK'),

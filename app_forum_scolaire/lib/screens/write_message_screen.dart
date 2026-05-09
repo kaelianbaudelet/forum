@@ -3,6 +3,8 @@ import '../api/message_api.dart';
 import '../api/forum_api.dart';
 import '../model/forum_model.dart';
 import '../widgets/myscaffold.dart';
+import '../utils/error_translator.dart';
+
 
 class WriteMessageScreen extends StatefulWidget {
   const WriteMessageScreen({super.key});
@@ -59,7 +61,7 @@ class _WriteMessageScreenState extends State<WriteMessageScreen> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Erreur lors du chargement des forums : $e')),
+          SnackBar(content: Text(ErrorTranslator.translate(e))),
         );
       }
     }
@@ -93,7 +95,7 @@ class _WriteMessageScreenState extends State<WriteMessageScreen> {
     } catch (e) {
        if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Erreur lors de la publication : $e')),
+          SnackBar(content: Text(ErrorTranslator.translate(e))),
         );
       }
     } finally {

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../api/user_api.dart';
+import '../utils/error_translator.dart';
+
 
 class RegisterForm extends StatefulWidget {
   const RegisterForm({super.key});
@@ -83,7 +85,7 @@ class _RegisterFormState extends State<RegisterForm> {
           context: context,
           builder: (context) => AlertDialog(
             title: const Text('Erreur'),
-            content: Text('Erreur lors de l’inscription : $e'),
+            content: Text(ErrorTranslator.translate(e)),
             actions: <Widget>[
               TextButton(
                 child: const Text('OK'),

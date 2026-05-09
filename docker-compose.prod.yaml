@@ -1,0 +1,6 @@
+# Master Production Docker Compose
+# This file groups the API and the App for a single-stack deployment
+
+include:
+  - path: ./api_forum_scolaire/docker-compose.prod.yaml
+  - path: ./app_forum_scolaire/docker-compose.prod.yaml

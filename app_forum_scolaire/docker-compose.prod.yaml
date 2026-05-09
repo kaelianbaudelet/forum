@@ -1,0 +1,7 @@
+services:
+  web_app:
+    build: .
+    container_name: forum_frontend_prod
+    ports:
+      - "6754:80"
+    restart: always

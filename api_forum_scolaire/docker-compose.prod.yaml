@@ -1,0 +1,33 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    ports:
+      - "6756:80"
+    environment:
+      - APP_ENV=prod
+      - DATABASE_URL=mysql://login:password@mariadb_db:3306/dbforum?serverVersion=12.2.2-MariaDB&charset=utf8mb4
+    depends_on:
+      mariadb_db:
+        condition: service_healthy
+
+  mariadb_db:
+    image: mariadb:12
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+      MARIADB_DATABASE: dbforum
+      MARIADB_USER: login
+      MARIADB_PASSWORD: password
+    ports:
+      - "6755:3306"
+    volumes:
+      - db_data_prod:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  db_data_prod:

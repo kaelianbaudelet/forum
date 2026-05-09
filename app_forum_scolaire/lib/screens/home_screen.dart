@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../api/forum_api.dart';
 import '../model/forum_model.dart';
 import '../widgets/myscaffold.dart';
+import '../utils/error_translator.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -31,7 +32,15 @@ class _HomeScreenState extends State<HomeScreen> {
           }
 
           if (snapshot.hasError) {
-            return Center(child: Text('Erreur : ${snapshot.error}'));
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Text(
+                  ErrorTranslator.translate(snapshot.error),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            );
           }
 
           if (!snapshot.hasData || snapshot.data!.isEmpty) {
@@ -45,14 +54,20 @@ class _HomeScreenState extends State<HomeScreen> {
             itemBuilder: (context, index) {
               if (index == 0) {
                 return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 20,
+                  ),
                   child: Center(
                     child: Image.asset(
                       'assets/logo.png',
                       height: 120,
                       errorBuilder: (context, error, stackTrace) {
-                        return const Icon(Icons.forum,
-                            size: 80, color: Colors.blue);
+                        return const Icon(
+                          Icons.forum,
+                          size: 80,
+                          color: Colors.blue,
+                        );
                       },
                     ),
                   ),
@@ -103,8 +118,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       style: TextStyle(color: Colors.grey[700]),
                     ),
                   ),
-                  trailing:
-                      const Icon(Icons.arrow_forward_ios, color: Colors.blue),
+                  trailing: const Icon(
+                    Icons.arrow_forward_ios,
+                    color: Colors.blue,
+                  ),
                   onTap: () {
                     Navigator.pushNamed(
                       context,

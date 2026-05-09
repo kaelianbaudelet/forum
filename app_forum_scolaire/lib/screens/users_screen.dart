@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../api/user_list_api.dart';
 import '../model/user_model.dart';
 import 'user_info_screen.dart';
+import '../utils/error_translator.dart';
 
 class UsersScreen extends StatefulWidget {
   const UsersScreen({super.key});
@@ -40,7 +41,15 @@ class _UsersScreenState extends State<UsersScreen> {
 
           // 2. Affichage d'un message d'erreur si l'API échoue
           if (snapshot.hasError) {
-            return Center(child: Text('Erreur : ${snapshot.error}'));
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Text(
+                  ErrorTranslator.translate(snapshot.error),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            );
           }
 
           // 3. Cas où aucune donnée n'est retournée
@@ -77,73 +86,73 @@ class _UsersScreenState extends State<UsersScreen> {
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(12),
-                  child: Row(
-                    children: [
-                      // Avatar avec l'initiale du prénom
-                      CircleAvatar(
-                        radius: 24,
-                        backgroundColor: Colors.blue[100],
-                        child: Text(
-                          u.firstName.isNotEmpty
-                              ? u.firstName[0].toUpperCase()
-                              : '?',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.blue[800],
+                    child: Row(
+                      children: [
+                        // Avatar avec l'initiale du prénom
+                        CircleAvatar(
+                          radius: 24,
+                          backgroundColor: Colors.blue[100],
+                          child: Text(
+                            u.firstName.isNotEmpty
+                                ? u.firstName[0].toUpperCase()
+                                : '?',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.blue[800],
+                            ),
                           ),
                         ),
-                      ),
 
-                      const SizedBox(width: 16),
+                        const SizedBox(width: 16),
 
-                      // Informations de l'utilisateur
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "${u.firstName} ${u.lastName}",
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
+                        // Informations de l'utilisateur
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "${u.firstName} ${u.lastName}",
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ),
 
-                            const SizedBox(height: 4),
+                              const SizedBox(height: 4),
 
-                            Text(
-                              u.email,
-                              style: TextStyle(
-                                fontSize: 13,
-                                color: Colors.grey[600],
+                              Text(
+                                u.email,
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  color: Colors.grey[600],
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ),
-
-                      // Badge avec l'ID
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 4,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.blue[50],
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Text(
-                          '#${u.id}',
-                          style: TextStyle(
-                            fontSize: 11,
-                            color: Colors.blue[700],
-                            fontWeight: FontWeight.w600,
+                            ],
                           ),
                         ),
-                      ),
-                    ],
-                  ),
+
+                        // Badge avec l'ID
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 4,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.blue[50],
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Text(
+                            '#${u.id}',
+                            style: TextStyle(
+                              fontSize: 11,
+                              color: Colors.blue[700],
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               );

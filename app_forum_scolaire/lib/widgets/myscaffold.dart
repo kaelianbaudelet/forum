@@ -81,10 +81,7 @@ class MyScaffold extends StatelessWidget {
                               (Route<dynamic> route) => false,
                             );
                           },
-                          child: const Text(
-                            'Déconnexion',
-                            style: TextStyle(color: Colors.red),
-                          ),
+                          child: const Text('Déconnexion'),
                         ),
                       ],
                     ),
@@ -108,11 +105,11 @@ class MyScaffold extends StatelessWidget {
         onPressed: () async {
           if (authProvider.isLoggedIn) {
             final result = await Navigator.pushNamed(
-              context, 
-              '/write-message', 
-              arguments: forumId
+              context,
+              '/write-message',
+              arguments: forumId,
             );
-            
+
             if (result == true && onPostSuccess != null) {
               onPostSuccess!();
             }

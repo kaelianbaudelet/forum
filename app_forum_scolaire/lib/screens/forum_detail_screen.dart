@@ -4,6 +4,7 @@ import '../api/message_api.dart';
 import '../model/forum_model.dart';
 import '../model/message_model.dart';
 import '../widgets/myscaffold.dart';
+import '../utils/error_translator.dart';
 
 class ForumDetailScreen extends StatefulWidget {
   const ForumDetailScreen({super.key});
@@ -42,7 +43,15 @@ class _ForumDetailScreenState extends State<ForumDetailScreen> {
         if (forumSnapshot.hasError) {
           return MyScaffold(
             name: 'Erreur',
-            body: Center(child: Text('Erreur : ${forumSnapshot.error}')),
+            body: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Text(
+                  ErrorTranslator.translate(forumSnapshot.error),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
           );
         }
 
@@ -76,26 +85,28 @@ class _ForumDetailScreenState extends State<ForumDetailScreen> {
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 10),
-                  ...forum.children.map((child) => Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0),
-                    child: ElevatedButton.icon(
-                      onPressed: () {
-                        Navigator.pushNamed(
-                          context,
-                          '/forum-detail',
-                          arguments: child.id,
-                        );
-                      },
-                      icon: const Icon(Icons.forum_outlined),
-                      label: Text(child.titre),
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: const Size(double.infinity, 50),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
+                  ...forum.children.map(
+                    (child) => Padding(
+                      padding: const EdgeInsets.only(bottom: 8.0),
+                      child: ElevatedButton.icon(
+                        onPressed: () {
+                          Navigator.pushNamed(
+                            context,
+                            '/forum-detail',
+                            arguments: child.id,
+                          );
+                        },
+                        icon: const Icon(Icons.forum_outlined),
+                        label: Text(child.titre),
+                        style: ElevatedButton.styleFrom(
+                          minimumSize: const Size(double.infinity, 50),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
                         ),
                       ),
                     ),
-                  )),
+                  ),
                   const SizedBox(height: 20),
                 ],
 
@@ -108,18 +119,27 @@ class _ForumDetailScreenState extends State<ForumDetailScreen> {
                 FutureBuilder<List<MessageModel>>(
                   future: futureMessages,
                   builder: (context, msgSnapshot) {
-                    if (msgSnapshot.connectionState == ConnectionState.waiting) {
+                    if (msgSnapshot.connectionState ==
+                        ConnectionState.waiting) {
                       return const Center(child: CircularProgressIndicator());
                     }
                     if (msgSnapshot.hasError) {
-                      return Center(child: Text('Erreur chargement messages : ${msgSnapshot.error}'));
+                      return Center(
+                        child: Text(
+                          ErrorTranslator.translate(msgSnapshot.error),
+                        ),
+                      );
                     }
                     final messages = msgSnapshot.data ?? [];
                     if (messages.isEmpty) {
-                      return const Center(child: Text('Aucun message dans ce forum.'));
+                      return const Center(
+                        child: Text('Aucun message dans ce forum.'),
+                      );
                     }
                     return Column(
-                      children: messages.map((m) => _buildMessageItem(m, forum.id)).toList(),
+                      children: messages
+                          .map((m) => _buildMessageItem(m, forum.id))
+                          .toList(),
                     );
                   },
                 ),
@@ -150,7 +170,9 @@ class _ForumDetailScreenState extends State<ForumDetailScreen> {
               } else {
                 // If not loaded, fetch from API
                 if (cachedReplies == null) {
-                  setState(() => _expandedIds.add(m.id)); // Show loading if we want, or just start fetch
+                  setState(
+                    () => _expandedIds.add(m.id),
+                  ); // Show loading if we want, or just start fetch
                   try {
                     final replies = await MessageApi().fetchReplies(m.id);
                     setState(() {
@@ -159,7 +181,7 @@ class _ForumDetailScreenState extends State<ForumDetailScreen> {
                   } catch (e) {
                     if (mounted) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Erreur chargement réponses : $e')),
+                        SnackBar(content: Text(ErrorTranslator.translate(e))),
                       );
                     }
                   }
@@ -172,20 +194,26 @@ class _ForumDetailScreenState extends State<ForumDetailScreen> {
               if (m.parentId == null) {
                 // Si on a répondu à un message racine, on recharge la liste des racines
                 setState(() {
-                  futureMessages = MessageApi().fetchRootMessagesByForum(forumId);
+                  futureMessages = MessageApi().fetchRootMessagesByForum(
+                    forumId,
+                  );
                 });
               } else {
                 // Si on a répondu à une réponse, on recharge la liste des réponses du parent de 'm'
                 // pour que 'm' soit actualisé avec son nouveau compteur de réponses
                 try {
-                  final parentReplies = await MessageApi().fetchReplies(m.parentId!);
+                  final parentReplies = await MessageApi().fetchReplies(
+                    m.parentId!,
+                  );
                   setState(() {
                     _loadedReplies[m.parentId!] = parentReplies;
                   });
                 } catch (e) {
                   // Fallback: refresh root if something fails
                   setState(() {
-                    futureMessages = MessageApi().fetchRootMessagesByForum(forumId);
+                    futureMessages = MessageApi().fetchRootMessagesByForum(
+                      forumId,
+                    );
                   });
                 }
               }
@@ -194,9 +222,22 @@ class _ForumDetailScreenState extends State<ForumDetailScreen> {
         ),
         if (isExpanded)
           cachedReplies == null
-              ? const Center(child: Padding(padding: EdgeInsets.all(8.0), child: CircularProgressIndicator(strokeWidth: 2)))
+              ? const Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  ),
+                )
               : Column(
-                  children: cachedReplies.map((reply) => _buildMessageItem(reply, forumId, indent: indent + 16)).toList(),
+                  children: cachedReplies
+                      .map(
+                        (reply) => _buildMessageItem(
+                          reply,
+                          forumId,
+                          indent: indent + 16,
+                        ),
+                      )
+                      .toList(),
                 ),
       ],
     );
@@ -227,7 +268,9 @@ class _MessageCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: indent > 0 ? Colors.grey.withOpacity(0.05) : Colors.white,
         border: Border(
-          left: indent > 0 ? BorderSide(color: Colors.blue.shade300, width: 3) : BorderSide.none,
+          left: indent > 0
+              ? BorderSide(color: Colors.blue.shade300, width: 3)
+              : BorderSide.none,
         ),
         boxShadow: [
           BoxShadow(
@@ -236,8 +279,11 @@ class _MessageCard extends StatelessWidget {
             offset: const Offset(0, 2),
           ),
         ],
-        borderRadius: indent > 0 
-            ? const BorderRadius.only(topRight: Radius.circular(10), bottomRight: Radius.circular(10)) 
+        borderRadius: indent > 0
+            ? const BorderRadius.only(
+                topRight: Radius.circular(10),
+                bottomRight: Radius.circular(10),
+              )
             : BorderRadius.circular(10),
       ),
       child: Padding(
@@ -250,11 +296,19 @@ class _MessageCard extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    if (indent > 0) Icon(Icons.subdirectory_arrow_right, size: 14, color: Colors.blue.shade300),
+                    if (indent > 0)
+                      Icon(
+                        Icons.subdirectory_arrow_right,
+                        size: 14,
+                        color: Colors.blue.shade300,
+                      ),
                     if (indent > 0) const SizedBox(width: 5),
                     Text(
                       "${message.userFirstName} ${message.userLastName}",
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 13,
+                      ),
                     ),
                     Text(
                       " • ${message.postedAt.day}/${message.postedAt.month}/${message.postedAt.year}",
@@ -274,7 +328,10 @@ class _MessageCard extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 4),
-            Text(message.content, style: TextStyle(fontSize: 14, color: Colors.grey[800])),
+            Text(
+              message.content,
+              style: TextStyle(fontSize: 14, color: Colors.grey[800]),
+            ),
             const SizedBox(height: 8),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -287,19 +344,21 @@ class _MessageCard extends StatelessWidget {
                       child: Row(
                         children: [
                           Icon(
-                            isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
+                            isExpanded
+                                ? Icons.keyboard_arrow_up
+                                : Icons.keyboard_arrow_down,
                             size: 18,
                             color: Colors.blue.shade700,
                           ),
                           const SizedBox(width: 4),
                           Text(
-                            isExpanded 
-                                ? "Masquer les réponses" 
+                            isExpanded
+                                ? "Masquer les réponses"
                                 : "Afficher les ${message.replies.length} réponses",
                             style: TextStyle(
-                              color: Colors.blue.shade700, 
-                              fontWeight: FontWeight.bold, 
-                              fontSize: 13
+                              color: Colors.blue.shade700,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 13,
                             ),
                           ),
                         ],
@@ -325,9 +384,19 @@ class _MessageCard extends StatelessWidget {
                     padding: const EdgeInsets.all(4.0),
                     child: Row(
                       children: [
-                        Icon(Icons.reply, size: 16, color: Colors.blue.shade600),
+                        Icon(
+                          Icons.reply,
+                          size: 16,
+                          color: Colors.blue.shade600,
+                        ),
                         const SizedBox(width: 4),
-                        Text('Répondre', style: TextStyle(color: Colors.blue.shade600, fontSize: 13)),
+                        Text(
+                          'Répondre',
+                          style: TextStyle(
+                            color: Colors.blue.shade600,
+                            fontSize: 13,
+                          ),
+                        ),
                       ],
                     ),
                   ),

@@ -49,6 +49,43 @@ class MessageFixtures extends Fixture implements DependentFixtureInterface
             $manager->persist($message);
         }
 
+        // --- AJOUTS POUR JULES BERTRAND (USER DEMO) ---
+        $jules = $this->getReference('user_demo', User::class);
+
+        // 1. Jules poste quelques messages originaux
+        for ($i = 0; $i < 3; $i++) {
+            $msgJules = new Message();
+            $msgJules->setTitre("Question de Jules " . ($i + 1));
+            $msgJules->setContenu($this->faker->realText(200));
+            $msgJules->setDatePoste(new \DateTime('-' . ($i + 1) . ' days'));
+            $msgJules->setUser($jules);
+            $msgJules->setForum($this->getReference('forum_ref_' . mt_rand(0, 39), Forum::class));
+            $manager->persist($msgJules);
+            
+            // Quelqu'un d'autre lui répond
+            $reponse = new Message();
+            $reponse->setTitre("Re: " . $msgJules->getTitre());
+            $reponse->setContenu("Salut Jules ! Voici une réponse à ta question.");
+            $reponse->setDatePoste(new \DateTime('-' . $i . ' days'));
+            $reponse->setUser($this->getReference('user' . mt_rand(0, 9), User::class));
+            $reponse->setParent($msgJules);
+            $reponse->setForum($msgJules->getForum());
+            $manager->persist($reponse);
+        }
+
+        // 2. Jules répond à d'autres personnes
+        for ($i = 0; $i < 3; $i++) {
+            $parent = $this->getReference('message_ref_' . mt_rand(0, 39), Message::class);
+            $replyJules = new Message();
+            $replyJules->setTitre("Re: " . $parent->getTitre());
+            $replyJules->setContenu("Je suis d'accord avec vous, merci pour le partage !");
+            $replyJules->setDatePoste(new \DateTime());
+            $replyJules->setUser($jules);
+            $replyJules->setParent($parent);
+            $replyJules->setForum($parent->getForum());
+            $manager->persist($replyJules);
+        }
+
         $manager->flush();
     }
 

@@ -1,0 +1,90 @@
+/// A premium landing page for the Web version.
+class WebLandingPage extends StatelessWidget {
+  const WebLandingPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        useMaterial3: true,
+        textTheme: GoogleFonts.lexendTextTheme(),
+        scaffoldBackgroundColor: Colors.white,
+        appBarTheme: const AppBarTheme(
+          elevation: 0,
+          scrolledUnderElevation: 0,
+          backgroundColor: Colors.white,
+        ),
+      ),
+      home: Scaffold(
+        backgroundColor: Colors.white,
+        body: Container(
+          color: Colors.white,
+          child: Column(
+            children: [
+              // Header Row (AppBar style)
+              Container(
+                padding: const EdgeInsets.symmetric(vertical: 15),
+                decoration: BoxDecoration(
+                  color: Colors.blue,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.1),
+                      blurRadius: 10,
+                      offset: const Offset(0, 5),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 20),
+                      child: Image.asset(
+                        'assets/logo.png',
+                        height: 40,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 20),
+                      child: IconButton(
+                        icon: const FaIcon(
+                          FontAwesomeIcons.github,
+                          size: 24,
+                          color: Colors.white,
+                        ),
+                        onPressed: () async {
+                          final Uri url = Uri.parse(
+                            "https://github.com/kaelianbaudelet/forum",
+                          );
+                          await launchUrl(
+                            url,
+                            mode: LaunchMode.externalApplication,
+                            webOnlyWindowName: '_blank',
+                          );
+                        },
+                        tooltip: "GitHub du projet",
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              // App Preview Section
+              Expanded(
+                child: DevicePreview(
+                  enabled: true,
+                  isToolbarVisible: false,
+                  backgroundColor: Colors.white,
+                  tools: const [],
+                  defaultDevice: Devices.ios.iPhone13,
+                  builder: (context) => const AppRoot(),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

@@ -30,11 +30,24 @@ class UserFixtures extends Fixture
                 ->setPrenom($this->faker->firstName())
                 ->setEmail(strtolower($user->getPrenom()) . '.' . strtolower($user->getNom()) . '@' . $this->faker->freeEmailDomain())
                 ->setPassword($this->passwordHasher->hashPassword($user, $slugger->slug(strtolower($user->getPrenom()))))
-                ->setDateInscription($this->faker->dateTimeThisYear());
+                ->setDateInscription($this->faker->dateTimeThisYear())
+                ->setPhone($this->faker->phoneNumber());
             
             $this->addReference('user' . $i, $user);
             $manager->persist($user);
         }
+
+        // Jules Bertrand
+        $jules = new User();
+        $jules->setNom('Bertrand')
+            ->setPrenom('Jules')
+            ->setEmail('test@demo.fr')
+            ->setPassword($this->passwordHasher->hashPassword($jules, 'test'))
+            ->setDateInscription(new \DateTime())
+            ->setPhone('06' . $this->faker->numerify('########'));
+        
+        $this->addReference('user_demo', $jules);
+        $manager->persist($jules);
         
         $manager->flush();
     }
