@@ -48,7 +48,7 @@ services:
       - USER_forum=${MARIADB_USER:-login}
       - PASSWORD_forum=${MARIADB_PASSWORD:-password}
       - DATABASE_forum=${MARIADB_DATABASE:-dbforum}
-      - LABEL_forum=Forum Database Prod
+      - LABEL_forum=Forum
     volumes:
       - dbgate_data_prod:/root/.dbgate
     depends_on:
