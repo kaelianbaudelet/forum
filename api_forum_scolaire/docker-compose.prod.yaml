@@ -32,5 +32,29 @@ services:
       timeout: 5s
       retries: 5
 
+  dbgate:
+    image: dbgate/dbgate
+    container_name: forum_dbgate_prod
+    restart: always
+    ports:
+      - "6760:3000"
+    environment:
+      - LOGIN=${DBGATE_LOGIN:-admin}
+      - PASSWORD=${DBGATE_PASSWORD}
+      - CONNECTIONS=forum
+      - ENGINE_forum=mysql@dbgate-plugin-mysql
+      - SERVER_forum=mariadb_db
+      - PORT_forum=3306
+      - USER_forum=${MARIADB_USER:-login}
+      - PASSWORD_forum=${MARIADB_PASSWORD:-password}
+      - DATABASE_forum=${MARIADB_DATABASE:-dbforum}
+      - LABEL_forum=Forum Database Prod
+    volumes:
+      - dbgate_data_prod:/root/.dbgate
+    depends_on:
+      mariadb_db:
+        condition: service_healthy
+
 volumes:
   db_data_prod:
+  dbgate_data_prod:
