@@ -1,0 +1,13 @@
+name: Update Portainer
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  update-portainer:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Portainer Webhook
+        run: curl -X POST "${{ secrets.PORTAINER_WEBHOOK_URL }}"
