@@ -7,7 +7,10 @@ services:
       - "6756:80"
     environment:
       - APP_ENV=prod
+      - APP_SECRET=${APP_SECRET:-5ef9078bee44fbc09aaa3fcf37925355}
       - DATABASE_URL=${DATABASE_URL:-mysql://login:password@mariadb_db:3306/dbforum?serverVersion=12.2.2-MariaDB&charset=utf8mb4}
+      - CORS_ALLOW_ORIGIN=${CORS_ALLOW_ORIGIN:-^https?://.*$}
+      - JWT_PASSPHRASE=${JWT_PASSPHRASE:-cb033370486418ae8468c69a4bf56c37afa7c21e9cd645f72963ad2ce6ef8d79}
     depends_on:
       mariadb_db:
         condition: service_healthy
