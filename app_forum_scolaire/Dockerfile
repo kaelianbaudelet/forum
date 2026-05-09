@@ -30,7 +30,14 @@ COPY --from=build-env /app/build/web /usr/share/nginx/html
 RUN mkdir -p /usr/share/nginx/html/assets
 COPY --from=build-env /app/build/app/outputs/flutter-apk/app-release.apk /usr/share/nginx/html/assets/app-release.apk
 
+# Add a script to inject environment variables into the .env file at runtime
+RUN echo '#!/bin/sh' > /entrypoint.sh && \
+    echo 'if [ -n "$API_BASE_URL" ]; then sed -i "s|API_BASE_URL=.*|API_BASE_URL=$API_BASE_URL|g" /usr/share/nginx/html/assets/.env.local; fi' >> /entrypoint.sh && \
+    echo 'if [ -n "$APP_DEMO" ]; then sed -i "s|APP_DEMO=.*|APP_DEMO=$APP_DEMO|g" /usr/share/nginx/html/assets/.env.local; fi' >> /entrypoint.sh && \
+    echo 'exec nginx -g "daemon off;"' >> /entrypoint.sh && \
+    chmod +x /entrypoint.sh
+
 # Expose port 80
 EXPOSE 80
 
-CMD ["nginx", "-g", "daemon off;"]
+ENTRYPOINT ["/entrypoint.sh"]
