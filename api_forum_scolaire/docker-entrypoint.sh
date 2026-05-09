@@ -15,5 +15,8 @@ else
     echo "Database already contains data (found $USER_COUNT users). Skipping fixtures."
 fi
 
+echo "Checking JWT keys..."
+php bin/console lexik:jwt:generate-keypair --skip-if-exists || echo "Failed to generate JWT keys, but continuing..."
+
 echo "Starting main process..."
 exec "$@"
