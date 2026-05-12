@@ -23,7 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return MyScaffold(
-      name: 'Liste des Forums TEST',
+      name: 'Liste des Forums',
       body: FutureBuilder<List<ForumModel>>(
         future: futureForums,
         builder: (context, snapshot) {
