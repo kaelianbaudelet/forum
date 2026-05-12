@@ -13,7 +13,6 @@ import 'screens/write_message_screen.dart';
 import 'screens/users_screen.dart';
 import 'providers/auth_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:url_launcher/link.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -454,7 +453,7 @@ class _WebLandingPageState extends State<WebLandingPage> {
                       isToolbarVisible: false,
                       backgroundColor: Colors.white,
                       tools: const [],
-                      defaultDevice: Devices.ios.iPhone13,
+                      defaultDevice: Devices.ios.iPhone16ProMax,
                       builder: (context) => const AppRoot(),
                     ),
                   ),
