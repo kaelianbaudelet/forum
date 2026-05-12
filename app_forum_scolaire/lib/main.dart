@@ -11,9 +11,9 @@ import 'screens/profile_screen.dart';
 import 'screens/forum_detail_screen.dart';
 import 'screens/write_message_screen.dart';
 import 'screens/users_screen.dart';
-import 'screens/badges_screen.dart';
 import 'providers/auth_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:url_launcher/link.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -491,7 +491,6 @@ class MyApp extends StatelessWidget {
         '/forum-detail': (context) => const ForumDetailScreen(),
         '/write-message': (context) => const WriteMessageScreen(),
         '/users': (context) => const UsersScreen(),
-        '/badges': (context) => const BadgesScreen(),
       },
     );
   }
