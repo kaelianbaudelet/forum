@@ -50,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
           final forums = snapshot.data!;
 
           return ListView.builder(
-            itemCount: forums.length + 3,
+            itemCount: forums.length + 2,
             itemBuilder: (context, index) {
               if (index == 0) {
                 return Padding(
@@ -76,10 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
               if (index == forums.length + 1) {
                 return Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16.0,
-                    vertical: 8.0,
-                  ),
+                  padding: const EdgeInsets.all(16.0),
                   child: ElevatedButton.icon(
                     onPressed: () => Navigator.pushNamed(context, '/users'),
                     icon: const Icon(Icons.people),
@@ -88,28 +85,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       padding: const EdgeInsets.all(16),
                       backgroundColor: Colors.blue.shade50,
                       foregroundColor: Colors.blue.shade900,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                    ),
-                  ),
-                );
-              }
-
-              if (index == forums.length + 2) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16.0,
-                    vertical: 8.0,
-                  ),
-                  child: ElevatedButton.icon(
-                    onPressed: () => Navigator.pushNamed(context, '/badges'),
-                    icon: const Icon(Icons.workspace_premium),
-                    label: const Text('Liste des badges'),
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.all(16),
-                      backgroundColor: Colors.amber.shade50,
-                      foregroundColor: Colors.amber.shade900,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15),
                       ),
