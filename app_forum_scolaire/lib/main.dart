@@ -360,7 +360,6 @@ class _WebLandingPageState extends State<WebLandingPage> {
                           padding: const EdgeInsets.only(right: 20),
                           child: Row(
                             children: [
-
                               Link(
                                 uri: Uri.parse(
                                   "https://github.com/kaelianbaudelet/forum",
