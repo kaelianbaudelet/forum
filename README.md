@@ -9,7 +9,7 @@ Le projet est divisé en deux parties principales :
 1.  **[api_forum_scolaire](./api_forum_scolaire)** : Le backend développé avec **Symfony 6.4** et **API Platform**. Il gère la logique métier, la base de données MariaDB et la sécurité via JWT.
 2.  **[app_forum_scolaire](./app_forum_scolaire)** : L'application mobile développée avec **Flutter**. Elle offre une expérience utilisateur fluide pour interagir avec le forum.
 
-## 🚀 Démarrage Rapide
+## Démarrage Rapide
 
 Pour mettre en place l'environnement complet :
 
@@ -37,6 +37,3 @@ flutter run
 ## 🛠 Architecture
 
 Le projet suit une architecture découplée où l'application mobile communique avec l'API via des requêtes REST sécurisées par des tokens JWT.
-
----
-Développé avec ❤️ pour faciliter l'échange entre étudiants.
